@@ -1,0 +1,116 @@
+Enter file contents here1.#include<stdio.h>
+2.#define MAXN 100000
+3.int MaxSeqSum(int arr[], int low, int high);
+4.int MaxOfThree(int a, int b, int c);
+5.int arr[MAXN+10];
+6.int G_MAX = 0;  
+7.int G_LeftIndex = 0;
+8.int G_RightIndex = 0;
+9.int main(void)
+10.{
+11.    int i, n, ans;
+12.     
+13.    scanf("%d", &n);
+14.    for(i = 0; i < n; i++)
+15.        scanf("%d", &arr[i]);
+16.          
+17.    ans = MaxSeqSum(arr, 0, n-1);
+18.    printf("%d", ans);
+19.    if(ans == 0)
+20.    {
+21.        for(i = 0; i < n; i++)
+22.            if(arr[i] == 0)
+23.                break;
+24.         
+25.        if(i == n)
+26.            printf(" %d %d", arr[0], arr[n-1]);
+27.        else 
+28.            printf(" %d %d", 0, 0);
+29.    }
+30.    else
+31.        printf(" %d %d", arr[G_LeftIndex], arr[G_RightIndex]);
+32.    return 0;
+33.}
+34. 
+35.int MaxSeqSum(int arr[], int low, int high) // 左闭右闭区间
+36.{
+37.    int i, leftBoundIndex, rightBoundIndex, mid;
+38.    int max1, max2, max3, thisSum, maxLeftSum, maxRightSum, localMax;
+39.     
+40.    if(low == high)
+41.    {
+42.        if(arr[low] <= 0)
+43.            return 0;
+44.        else 
+45.            return arr[low];
+46.    }
+47.         
+48.    mid = low + ((high-low) >> 1); 
+49.    max1 = MaxSeqSum(arr, low, mid);
+50.    max2 = MaxSeqSum(arr, mid+1, high);
+51.     
+52.    thisSum = maxLeftSum = 0;
+53.    for(i = mid; i >= low; i--)
+54.    {
+55.        thisSum += arr[i];
+56.        if(thisSum > maxLeftSum)
+57.        {
+58.            maxLeftSum = thisSum;
+59.            leftBoundIndex = i;
+60.        }
+61.    }
+62.    thisSum = maxRightSum = 0;
+63.    for(i = mid+1; i <= high; i++)
+64.    {
+65.        thisSum += arr[i];
+66.        if(thisSum > maxRightSum)
+67.        {
+68.            maxRightSum = thisSum;
+69.            rightBoundIndex = i;
+70.        }
+71.    }
+72.     
+73.    max3 = maxLeftSum + maxRightSum;
+74.     
+75.     
+76.     
+77.    localMax = MaxOfThree(max1, max2, max3);
+78. 
+79.    if(G_MAX < localMax)
+80.    {
+81.        G_MAX = localMax;
+82./////////////////////////////   /////////////
+83.        if(max1 == G_MAX)
+84.        {
+85.            G_LeftIndex = G_RightIndex = low;
+86.        }
+87.        else if(max3 == G_MAX)
+88.        {
+89.            if(max3 == max2) // 处理右边界是垃圾值的情况
+90.                G_LeftIndex = rightBoundIndex;
+91.            else
+92.                G_LeftIndex = leftBoundIndex;
+93. 
+94.            G_RightIndex = rightBoundIndex;
+95.        }
+96.        else 
+97.        {
+98.            G_LeftIndex = G_RightIndex = high;
+99.        }
+100.    }   
+101.////////////////////////////////////////////
+102.//  printf("%d %d\n", low, high);
+103.//  printf("%d %d\n", G_LeftIndex, G_RightIndex); //test
+104. 
+105.    return localMax;
+106.}
+107. 
+108.int MaxOfThree(int a, int b, int c)
+109.{
+110.    int max = a;
+111.    if(b > max)
+112.        max = b;
+113.    if(c > max)
+114.        max = c;
+115.    return max;
+116.}
