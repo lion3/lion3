@@ -1,0 +1,11 @@
+int maxsum = 0;
+int func(int left, right, array a[]) {
+  sumleft,sumright,sumcross;
+  if (left != right) {
+  sumleft = func(left, right/2, a);
+  sumright = func(right/2 + 1, right, a);
+  sumcross = cross(mid, a);
+  }
+  return max(sumleft, sumright, sumcross);
+}
+int cross(mid)
