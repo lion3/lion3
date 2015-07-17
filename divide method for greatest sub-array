@@ -6,6 +6,10 @@ int func(int left, right, array a[]) {
   sumright = func(right/2 + 1, right, a);
   sumcross = cross(mid, a);
   }
+  if (left == right) {
+  if(a[left] < 0) return 0;
+  else return a[left];
+  }
   return max(sumleft, sumright, sumcross);
 }
 int cross(mid)
